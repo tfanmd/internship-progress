@@ -16,7 +16,7 @@ device = "cuda" if torch.cuda.is_available() else "cpu"
 print(f"Menggunakan perangkat: {device.upper()}")
 
 print("Memuat model ASR dan MT...")
-model_id_asr = "openai/whisper-base"
+model_id_asr = "openai/whisper-small"
 processor_asr = AutoProcessor.from_pretrained(model_id_asr)
 model_asr = AutoModelForSpeechSeq2Seq.from_pretrained(model_id_asr).to(device)
 
@@ -44,6 +44,8 @@ def penangkap_suara(recognizer, audio):
 def jalankan_sistem_simultan():
     r = sr.Recognizer()
     r.pause_threshold = 1.0 # Jeda 1 detik sebagai pemotong kalimat
+
+    r.non_speaking_duration = 0.5 # Jeda 0.5 detik untuk memastikan benar-benar selesai bicara
     
     mikrofon = sr.Microphone(sample_rate=16000)
     
